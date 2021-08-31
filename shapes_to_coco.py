@@ -111,7 +111,7 @@ def main():
 
             image_id = image_id + 1
 
-    with open('{}/instances_shape_' + DATA_TYPE + '.json'.format(ROOT_DIR), 'w') as output_json_file:
+    with open(ROOT_DIR + DATA_TYPE + '/instances_shape_' + DATA_TYPE + '.json', 'w') as output_json_file:
         json.dump(coco_output, output_json_file)
 
 
