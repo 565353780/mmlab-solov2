@@ -1,3 +1,22 @@
+# mmlab-solov2
+
+## Install
+```bash
+conda create -n solo python=3.8 -y
+conda activate solo
+
+pip install torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio==0.9.0 -f https://download.pytorch.org/whl/torch_stable.html
+pip install -r requirements/build.txt
+pip install "git+https://github.com/cocodataset/cocoapi.git#subdirectory=PythonAPI"
+pip install -v -e .
+```
+
+## Prepare Dataset
+```bash
+mkdir data
+
+ln -s <your-dataset-root-path> data/<your-dataset-root-path>
+```
 
 # SOLO: Segmenting Objects by Locations
 
