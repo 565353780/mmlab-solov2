@@ -13,6 +13,9 @@ pip install -v -e .
 
 ## Prepare Dataset
 ```bash
+pip install cython
+pip install git+git://github.com/waspinator/coco.git@2.1.0
+
 mkdir data
 
 ln -s <your-dataset-root-path> data/<your-dataset-root-path>
