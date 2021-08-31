@@ -15,6 +15,7 @@ pip install -v -e .
 ```bash
 pip install cython
 pip install git+git://github.com/waspinator/coco.git@2.1.0
+pip install git+git://github.com/waspinator/pycococreator.git@0.2.0
 ```
 edit shapes_to_coco.py
 ```bash
