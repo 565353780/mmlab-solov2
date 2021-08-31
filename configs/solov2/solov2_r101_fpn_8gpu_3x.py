@@ -91,7 +91,7 @@ test_pipeline = [
         ])
 ]
 data = dict(
-    imgs_per_gpu=2,
+    imgs_per_gpu=3,
     workers_per_gpu=2,
     train=dict(
         type=dataset_type,
@@ -129,7 +129,7 @@ log_config = dict(
 # yapf:enable
 # runtime settings
 total_epochs = 30000
-device_ids = range(8)
+device_ids = range(1)
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
 work_dir = './work_dirs/solov2_release_r101_fpn_8gpu_3x'
