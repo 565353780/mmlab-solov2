@@ -1,8 +1,8 @@
 # model settings
 model = dict(
     type='SOLOv2',
-    #  pretrained='torchvision://resnet101',
-    pretrained='./resnet101.pth',
+    pretrained='torchvision://resnet101',
+    #  pretrained='./resnet101.pth',
     backbone=dict(
         type='ResNet',
         depth=101,
@@ -95,17 +95,17 @@ data = dict(
     workers_per_gpu=2,
     train=dict(
         type=dataset_type,
-        ann_file=data_root + 'train/annotations/instances_shape_train.json',
+        ann_file=data_root + 'train/instances_shape_train.json',
         img_prefix=data_root + 'train/images/',
         pipeline=train_pipeline),
     val=dict(
         type=dataset_type,
-        ann_file=data_root + 'val/annotations/instances_shape_val.json',
+        ann_file=data_root + 'val/instances_shape_val.json',
         img_prefix=data_root + 'val/images/',
         pipeline=test_pipeline),
     test=dict(
         type=dataset_type,
-        ann_file=data_root + 'test/annotations/instances_shape_test.json',
+        ann_file=data_root + 'test/instances_shape_test.json',
         img_prefix=data_root + 'test/images/',
         pipeline=test_pipeline))
 # optimizer
@@ -128,7 +128,7 @@ log_config = dict(
     ])
 # yapf:enable
 # runtime settings
-total_epochs = 36
+total_epochs = 30000
 device_ids = range(8)
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
