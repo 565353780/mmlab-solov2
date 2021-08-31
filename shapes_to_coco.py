@@ -9,8 +9,8 @@ from PIL import Image
 import numpy as np
 from pycococreatortools import pycococreatortools
 
-ROOT_DIR = 'train'
-IMAGE_DIR = os.path.join(ROOT_DIR, "shapes_train2018")
+ROOT_DIR = '/home/chli/3D_FRONT/output_mask_dataset/'
+IMAGE_DIR = os.path.join(ROOT_DIR, "shapes")
 ANNOTATION_DIR = os.path.join(ROOT_DIR, "annotations")
 
 INFO = {
@@ -30,23 +30,40 @@ LICENSES = [
     }
 ]
 
-CATEGORIES = [
-    {
-        'id': 1,
-        'name': 'accessory',
-        'supercategory': 'shape',
-    },
-    {
-        'id': 2,
-        'name': 'circle',
-        'supercategory': 'shape',
-    },
-    {
-        'id': 3,
-        'name': 'triangle',
-        'supercategory': 'shape',
-    },
-]
+classes = ['accessory', 'appliance', 'art', 'basin', 'bath',
+           'bed', 'build element', 'cabinet', 'chair', 'electronics',
+           'kitchen cabinet', 'lighting', 'media unit', 'mirror', 'outdoor furniture',
+           'plants', 'recreation', 'shelf', 'sofa', 'stair',
+           'storage unit', 'table', 'wardrobe']
+
+CATEGORIES = []
+
+for i in range(len(classes)):
+    current_dict = {'id':i+1, 'name':classes[i], 'supercategory':'shape'}
+    CATEGORIES.append(current_dict)
+
+#  CATEGORIES = [
+    #  {
+        #  'id': 1,
+        #  'name': 'accessory',
+        #  'supercategory': 'shape',
+    #  },
+    #  {
+        #  'id': 2,
+        #  'name': 'appliance',
+        #  'supercategory': 'shape',
+    #  },
+    #  {
+        #  'id': 3,
+        #  'name': 'art',
+        #  'supercategory': 'shape',
+    #  },
+    #  {
+        #  'id': 4,
+        #  'name': 'basin',
+        #  'supercategory': 'shape',
+    #  },
+#  ]
 
 def filter_for_jpeg(root, files):
     file_types = ['*.jpg']
