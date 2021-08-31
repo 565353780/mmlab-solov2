@@ -9,9 +9,10 @@ from PIL import Image
 import numpy as np
 from pycococreatortools import pycococreatortools
 
+DATA_TYPE = 'train'
 ROOT_DIR = '/home/chli/3D_FRONT/output_mask_dataset/'
-IMAGE_DIR = os.path.join(ROOT_DIR, "shapes")
-ANNOTATION_DIR = os.path.join(ROOT_DIR, "annotations")
+IMAGE_DIR = ROOT_DIR + DATA_TYPE + "/images/"
+ANNOTATION_DIR = ROOT_DIR + DATA_TYPE + "/annotations/"
 
 INFO = {
     "description": "Example Dataset",
@@ -41,29 +42,6 @@ CATEGORIES = []
 for i in range(len(classes)):
     current_dict = {'id':i+1, 'name':classes[i], 'supercategory':'shape'}
     CATEGORIES.append(current_dict)
-
-#  CATEGORIES = [
-    #  {
-        #  'id': 1,
-        #  'name': 'accessory',
-        #  'supercategory': 'shape',
-    #  },
-    #  {
-        #  'id': 2,
-        #  'name': 'appliance',
-        #  'supercategory': 'shape',
-    #  },
-    #  {
-        #  'id': 3,
-        #  'name': 'art',
-        #  'supercategory': 'shape',
-    #  },
-    #  {
-        #  'id': 4,
-        #  'name': 'basin',
-        #  'supercategory': 'shape',
-    #  },
-#  ]
 
 def filter_for_jpeg(root, files):
     file_types = ['*.jpg']
@@ -133,7 +111,7 @@ def main():
 
             image_id = image_id + 1
 
-    with open('{}/instances_shape_train.json'.format(ROOT_DIR), 'w') as output_json_file:
+    with open('{}/instances_shape_' + DATA_TYPE + '.json'.format(ROOT_DIR), 'w') as output_json_file:
         json.dump(coco_output, output_json_file)
 
 
