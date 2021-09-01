@@ -2,7 +2,6 @@
 model = dict(
     type='SOLOv2',
     pretrained='torchvision://resnet101',
-    #  pretrained='./resnet101.pth',
     backbone=dict(
         type='ResNet',
         depth=101,
@@ -128,7 +127,7 @@ log_config = dict(
     ])
 # yapf:enable
 # runtime settings
-total_epochs = 30000
+total_epochs = 300
 device_ids = range(1)
 dist_params = dict(backend='nccl')
 log_level = 'INFO'

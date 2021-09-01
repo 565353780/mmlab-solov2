@@ -25,6 +25,12 @@ mkdir data
 ln -s <your-dataset-root-path> data/<your-dataset-root-path>
 ```
 
+## Use tensorboard
+```bash
+cd work_dirs/solov2_release_r101_fpn_8gpu_3x
+tensorboard --logdir=tf_logs --bind_all
+```
+
 # SOLO: Segmenting Objects by Locations
 
 This project hosts the code for implementing the SOLO algorithms for instance segmentation.
