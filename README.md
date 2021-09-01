@@ -13,7 +13,7 @@ pip install -v -e .
 
 ## Prepare Dataset
 ```bash
-pip install cython
+pip install cython future tensorboard
 pip install git+git://github.com/waspinator/coco.git@2.1.0
 pip install git+git://github.com/waspinator/pycococreator.git@0.2.0
 ```
