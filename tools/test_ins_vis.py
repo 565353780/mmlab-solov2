@@ -18,12 +18,19 @@ import cv2
 import numpy as np
 import matplotlib.cm as cm
 
+classes = ['accessory', 'appliance', 'art', 'basin', 'bath',
+           'bed', 'build element', 'cabinet', 'chair', 'electronics',
+           'kitchen cabinet', 'lighting', 'media unit', 'mirror', 'outdoor furniture',
+           'plants', 'recreation', 'shelf', 'sofa', 'stair',
+           'storage unit', 'table', 'wardrobe']
+
 def vis_seg(data, result, img_norm_cfg, data_id, colors, score_thr, save_dir):
     img_tensor = data['img'][0]
     img_metas = data['img_meta'][0].data[0]
     imgs = tensor2imgs(img_tensor, **img_norm_cfg)
     assert len(imgs) == len(img_metas)
-    class_names = get_classes('coco')
+    #  class_names = get_classes('coco')
+    class_names = classes
 
     for img, img_meta, cur_result in zip(imgs, img_metas, result):
         if cur_result is None:

@@ -58,7 +58,7 @@ test_cfg = dict(
     max_per_img=100)
 # dataset settings
 dataset_type = 'CocoDataset'
-data_root = 'data/output_mask_dataset/'
+data_root = 'data/output_mask_1920x1080/'
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
 train_pipeline = [
@@ -91,7 +91,7 @@ test_pipeline = [
         ])
 ]
 data = dict(
-    imgs_per_gpu=3,
+    imgs_per_gpu=1,
     workers_per_gpu=2,
     train=dict(
         type=dataset_type,
@@ -123,8 +123,8 @@ checkpoint_config = dict(interval=1)
 log_config = dict(
     interval=50,
     hooks=[
-        dict(type='TextLoggerHook'),
-        # dict(type='TensorboardLoggerHook')
+        #  dict(type='TextLoggerHook'),
+        dict(type='TensorboardLoggerHook')
     ])
 # yapf:enable
 # runtime settings
