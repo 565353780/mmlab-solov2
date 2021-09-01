@@ -9,111 +9,156 @@ from PIL import Image
 import numpy as np
 from pycococreatortools import pycococreatortools
 
-DATA_TYPE = 'train'
-ROOT_DIR = '/home/chli/3D_FRONT/output_mask_dataset/'
-IMAGE_DIR = ROOT_DIR + DATA_TYPE + "/images/"
-ANNOTATION_DIR = ROOT_DIR + DATA_TYPE + "/annotations/"
+class ShapesToCOCO:
+    def __init__(self):
+        self.reset()
+        return
 
-INFO = {
-    "description": "Example Dataset",
-    "url": "https://github.com/waspinator/pycococreator",
-    "version": "0.1.0",
-    "year": 2018,
-    "contributor": "waspinator",
-    "date_created": datetime.datetime.utcnow().isoformat(' ')
-}
+    def reset(self):
+        self.dataset_root_dir = None
+        self.data_type_list = []
+        self.info = {
+            "description": "Example Dataset",
+            "url": "https://github.com/waspinator/pycococreator",
+            "version": "0.1.0",
+            "year": 2018,
+            "contributor": "waspinator",
+            "date_created": datetime.datetime.utcnow().isoformat(' ')}
+        self.licenses = [{
+            "id": 1,
+            "name": "Attribution-NonCommercial-ShareAlike License",
+            "url": "http://creativecommons.org/licenses/by-nc-sa/2.0/"}]
+        self.classes = []
+        self.categories = []
+        return
 
-LICENSES = [
-    {
-        "id": 1,
-        "name": "Attribution-NonCommercial-ShareAlike License",
-        "url": "http://creativecommons.org/licenses/by-nc-sa/2.0/"
-    }
-]
+    def setDatasetRootDir(self, dataset_root_dir):
+        self.dataset_root_dir = dataset_root_dir
+        if self.dataset_root_dir[-1] != "/":
+            self.dataset_root_dir += "/"
+        return
 
-classes = ['accessory', 'appliance', 'art', 'basin', 'bath',
-           'bed', 'build element', 'cabinet', 'chair', 'electronics',
-           'kitchen cabinet', 'lighting', 'media unit', 'mirror', 'outdoor furniture',
-           'plants', 'recreation', 'shelf', 'sofa', 'stair',
-           'storage unit', 'table', 'wardrobe']
+    def setDataType(self, data_type_list):
+        self.data_type_list = data_type_list
+        return
 
-CATEGORIES = []
+    def createCategories(self):
+        for i in range(len(classes)):
+            current_dict = {'id':i+1, 'name':classes[i], 'supercategory':'shape'}
+            self.categories.append(current_dict)
+        return
 
-for i in range(len(classes)):
-    current_dict = {'id':i+1, 'name':classes[i], 'supercategory':'shape'}
-    CATEGORIES.append(current_dict)
+    def setClasses(self, classes):
+        self.classes = classes
+        self.createCategories()
+        return
 
-def filter_for_jpeg(root, files):
-    file_types = ['*.jpg']
-    file_types = r'|'.join([fnmatch.translate(x) for x in file_types])
-    files = [os.path.join(root, f) for f in files]
-    files = [f for f in files if re.match(file_types, f)]
-    
-    return files
+    def filter_for_jpeg(self, root, files):
+        file_types = ['*.jpg']
+        file_types = r'|'.join([fnmatch.translate(x) for x in file_types])
+        files = [os.path.join(root, f) for f in files]
+        files = [f for f in files if re.match(file_types, f)]
+        
+        return files
 
-def filter_for_annotations(root, files, image_filename):
-    file_types = ['*.jpg']
-    file_types = r'|'.join([fnmatch.translate(x) for x in file_types])
-    basename_no_extension = os.path.splitext(os.path.basename(image_filename))[0]
-    file_name_prefix = basename_no_extension + '.*'
-    files = [os.path.join(root, f) for f in files]
-    files = [f for f in files if re.match(file_types, f)]
-    files = [f for f in files if re.match(file_name_prefix, os.path.splitext(os.path.basename(f))[0])]
+    def filter_for_annotations(self, root, files, image_filename):
+        file_types = ['*.jpg']
+        file_types = r'|'.join([fnmatch.translate(x) for x in file_types])
+        basename_no_extension = os.path.splitext(os.path.basename(image_filename))[0]
+        file_name_prefix = basename_no_extension + '.*'
+        files = [os.path.join(root, f) for f in files]
+        files = [f for f in files if re.match(file_types, f)]
+        files = [f for f in files if re.match(file_name_prefix, os.path.splitext(os.path.basename(f))[0])]
 
-    return files
+        return files
 
-def main():
+    def createCOCOJson(self):
 
-    coco_output = {
-        "info": INFO,
-        "licenses": LICENSES,
-        "categories": CATEGORIES,
-        "images": [],
-        "annotations": []
-    }
+        for data_type in data_type_list:
+            coco_output = {
+                "info": self.info,
+                "licenses": self.licenses,
+                "categories": self.categories,
+                "images": [],
+                "annotations": []
+            }
 
-    image_id = 1
-    segmentation_id = 1
-    
-    # filter for jpeg images
-    for root, _, files in os.walk(IMAGE_DIR):
-        image_files = filter_for_jpeg(root, files)
+            image_id = 1
+            segmentation_id = 1
 
-        # go through each image
-        for image_filename in image_files:
-            image = Image.open(image_filename)
-            image_info = pycococreatortools.create_image_info(
-                image_id, os.path.basename(image_filename), image.size)
-            coco_output["images"].append(image_info)
+            image_dir = self.dataset_root_dir + data_type + "/images/"
+            annotation_dir = self.dataset_root_dir + data_type + "/annotations/"
 
-            # filter for associated png annotations
-            for root, _, files in os.walk(ANNOTATION_DIR):
-                annotation_files = filter_for_annotations(root, files, image_filename)
+            
+            # filter for jpeg images
+            for root, _, files in os.walk(image_dir):
+                image_files = self.filter_for_jpeg(root, files)
 
-                # go through each associated annotation
-                for annotation_filename in annotation_files:
-                    
-                    print(annotation_filename)
-                    class_id = [x['id'] for x in CATEGORIES if x['name'] in annotation_filename][0]
+                solved_image_num = 0
 
-                    category_info = {'id': class_id, 'is_crowd': 'crowd' in image_filename}
-                    binary_mask = np.asarray(Image.open(annotation_filename)
-                        .convert('1')).astype(np.uint8)
-                    
-                    annotation_info = pycococreatortools.create_annotation_info(
-                        segmentation_id, image_id, category_info, binary_mask,
-                        image.size, tolerance=2)
+                # go through each image
+                for image_filename in image_files:
+                    solved_image_num += 1
 
-                    if annotation_info is not None:
-                        coco_output["annotations"].append(annotation_info)
+                    image = Image.open(image_filename)
 
-                    segmentation_id = segmentation_id + 1
+                    image_info = pycococreatortools.create_image_info(
+                        image_id, os.path.basename(image_filename), image.size)
 
-            image_id = image_id + 1
+                    coco_output["images"].append(image_info)
 
-    with open(ROOT_DIR + DATA_TYPE + '/instances_shape_' + DATA_TYPE + '.json', 'w') as output_json_file:
-        json.dump(coco_output, output_json_file)
+                    # filter for associated png annotations
+                    for root, _, files in os.walk(annotation_dir):
+                        annotation_files = self.filter_for_annotations(root, files, image_filename)
+
+                        solved_annotation_num = 0
+
+                        # go through each associated annotation
+                        for annotation_filename in annotation_files:
+                            solved_annotation_num += 1
+                            
+                            class_id = [x['id'] for x in self.categories if x['name'] in annotation_filename][0]
+
+                            category_info = {'id': class_id, 'is_crowd': 'crowd' in image_filename}
+
+                            binary_mask = np.asarray(Image.open(annotation_filename)
+                                .convert('1')).astype(np.uint8)
+                            
+                            annotation_info = pycococreatortools.create_annotation_info(
+                                segmentation_id, image_id, category_info, binary_mask,
+                                image.size, tolerance=2)
+
+                            if annotation_info is not None:
+                                coco_output["annotations"].append(annotation_info)
+
+                            segmentation_id = segmentation_id + 1
+
+                            print("\rSolving at : Data type : " + data_type +
+                                  " Image : " + str(solved_image_num) + "/" + str(len(image_files)) +
+                                  " Annotation : " + str(solved_annotation_num) + "/" + str(len(annotation_files)) +
+                                  "    ", end="")
+
+                    image_id += 1
+            print()
+
+            with open(self.dataset_root_dir + data_type + '/instances_shape_' + data_type + '.json', 'w') as output_json_file:
+                json.dump(coco_output, output_json_file)
 
 
 if __name__ == "__main__":
-    main()
+    dataset_root_dir = '/home/chli/3D_FRONT/output_mask_1920x1080/'
+    classes = ['accessory', 'appliance', 'art', 'basin', 'bath',
+               'bed', 'build element', 'cabinet', 'chair', 'electronics',
+               'kitchen cabinet', 'lighting', 'media unit', 'mirror', 'outdoor furniture',
+               'plants', 'recreation', 'shelf', 'sofa', 'stair',
+               'storage unit', 'table', 'wardrobe']
+    data_type_list = ['train', 'test', 'val']
+
+    shapes_to_coco = ShapesToCOCO()
+
+    shapes_to_coco.setDatasetRootDir(dataset_root_dir)
+    shapes_to_coco.setClasses(classes)
+    shapes_to_coco.setDataType(data_type_list)
+
+    shapes_to_coco.createCOCOJson()
+
