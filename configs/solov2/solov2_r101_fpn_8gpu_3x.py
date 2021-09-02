@@ -127,11 +127,11 @@ log_config = dict(
     ])
 # yapf:enable
 # runtime settings
-total_epochs = 300
+total_epochs = 3000
 device_ids = range(1)
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
 work_dir = './work_dirs/solov2_release_r101_fpn_8gpu_3x'
 load_from = None
-resume_from = None
+resume_from = './work_dirs/solov2_release_r101_fpn_8gpu_3x/latest.pth'
 workflow = [('train', 1)]
