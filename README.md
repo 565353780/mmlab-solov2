@@ -2,10 +2,15 @@
 
 ## Install
 ```bash
-conda create -n solo python=3.8 -y
-conda activate solo
+conda create -n mmlab python=3.8 -y
+conda activate mmlab
 
 pip install torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio==0.9.0 -f https://download.pytorch.org/whl/torch_stable.html
+pip install mmcv-full -f https://download.openmmlab.com/mmcv/dist/cu111/torch1.9.0/index.html
+pip install mmdet instaboostfast
+pip install git+https://github.com/cocodataset/panopticapi.git
+pip install git+https://github.com/lvis-dataset/lvis-api.git
+pip install albumentations --no-binary imgaug,albumentations
 pip install -r requirements/build.txt
 pip install "git+https://github.com/cocodataset/cocoapi.git#subdirectory=PythonAPI"
 pip install -v -e .
@@ -13,20 +18,13 @@ pip install -v -e .
 
 ## Prepare Dataset
 ```bash
-pip install tqdm cython future tensorboard
-pip install git+git://github.com/waspinator/coco.git@2.1.0
-pip install git+git://github.com/waspinator/pycococreator.git@0.2.0
-```
-edit shapes_to_coco.py
-```bash
-python shapes_to_coco.py
-
 mkdir data
 ln -s <your-dataset-root-path> data/<your-dataset-root-path>
 ```
 
 ## Use tensorboard
 ```bash
+pip install tqdm cython future tensorboard
 cd work_dirs/solov2_release_r101_fpn_8gpu_3x
 tensorboard --logdir=tf_logs --bind_all
 ```
